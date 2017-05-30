@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+  <title>Custom Hello Galaxy Widget</title>
+
+  <style>
+    .esri-hello-galaxy {
+      font-family: "Helvetica Neue", sans-serif;
+      display: inline-block;
+    }
+    
+    .esri-hello-galaxy--emphasis {
+      font-weight: bold;
+    }
+    .widgetClass {width: 100%; height: 300px; margin-top: 15px; border: 1px solid navy; border-radius: 4px; 
+        background-color: whitesmoke; text-align: center; font-size: 18pt; font-weight: bold}
+  </style>
+  <script>
+  var locationPath = location.pathname.replace(/\/[^\/]+$/, "");
+  window.dojoConfig = {
+    packages: [
+      {
+        name: "app",
+        location: locationPath
+      }
+    ]
+  };
+  </script>
+  <script src="https://js.arcgis.com/4.3/"></script>
+  <script>
+    var widget;
+
+    require([
+      "app/HelloGalaxy",
+      "dojo/domReady!"
+    ], function(
+      HelloGalaxy
+    ) {
+
+      var names = [
+        {
+          firstName: "Lone",
+          lastName: "Star"
+        },
+        {
+          firstName: "Dark",
+          lastName: "Helmet"
+        },
+        {
+          firstName: "Yogurt",
+          lastName: "The Wise"
+        }],
+        nameIndex = 0;
+
+      var widget = new HelloGalaxy({
+        firstName: names[nameIndex].firstName,
+        lastName: names[nameIndex].lastName,
+        container: "widgetDiv"
+      });
+
+      function changeName() {
+        widget.set(names[++nameIndex % names.length]);
+      }
+
+      widget.on("greeted", function(e) {
+        console.log(e);
+      })
+      setInterval(changeName, 2000);
+    });
+  </script>
+</head>
+
+<body>
+  <div id="widgetDiv" class="widgetClass"></div>
+</body>
+</html>
